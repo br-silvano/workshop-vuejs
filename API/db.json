@@ -1,0 +1,29 @@
+{
+  "produtos": [
+    {
+      "id": 1,
+      "codigo": "000001",
+      "descricao": "Produto 1",
+      "preco": 1.1
+    },
+    {
+      "id": 2,
+      "codigo": "000002",
+      "descricao": "Produto 2",
+      "preco": 2.2
+    },
+    {
+      "id": 3,
+      "codigo": "000003",
+      "descricao": "Produto 3",
+      "preco": 3.3
+    },
+    {
+      "id": 4,
+      "codigo": "000004",
+      "descricao": "Produto 4",
+      "preco": 4.4
+    }
+  ],
+  "pedidos": []
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pedido</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@1.14.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
+    <link href="styles/pedido.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@^2.0.0/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@1.14.0/dist/quasar.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@v1.0.0/dist/lang/pt-br.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"></script>
+
+    <div id="app">
+      <q-layout>
+        <q-page-container>
+          <q-header>
+            <q-toolbar>
+              <q-toolbar-title>Pedido</q-toolbar-title>
+            </q-toolbar>
+          </q-header>
+
+          <q-page>
+            <q-form
+              @submit="onSubmit"
+              @reset="onReset"
+              class="q-pa-md"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="off"
+              spellcheck="false"
+              ref="form"
+            >
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <q-input v-model.trim="cliente.nome" label="Nome do cliente"
+                    lazy-rules
+                    :rules="[ val => val && val.length > 0 || 'Nome do cliente obrigatório']"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <q-input v-model="dataEntrega"
+                    label="Data de entrega" mask="##/##/####"
+                    lazy-rules
+                    :rules="[ val => val && val.length === 10 || 'Data de entrega obrigatória']"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy ref="qDateProxy"
+                          transition-show="scale" transition-hide="scale">
+                          <q-date v-model="dataEntrega"
+                            @input="() => $refs.qDateProxy.hide()" mask="DD/MM/YYYY"
+                          >
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup label="Fechar"
+                                color="primary" flat
+                              />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="text-subtitle2">Produto(s)</div>
+
+              <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                  <q-input v-model.lazy.trim="busca" label="Procurar" />
+                </div>
+              </div>
+
+              <div class="row" v-for="(item, index) in itens">
+                <div class="col-xs-12 col-sm-2"
+                  v-bind:class="{ 'item-destaque': index % 2 == 0 }">
+                  <q-input v-model="item.produto.codigo" label="Código"
+                    disable
+                  />
+                </div>
+                <div class="col-xs-12 col-sm-4"
+                  v-bind:class="{ 'item-destaque': index % 2 == 0 }">
+                  <q-input v-model="item.produto.descricao" label="Descrição"
+                    disable
+                  />
+                </div>
+                <div class="col-xs-12 col-sm-2"
+                  v-bind:class="{ 'item-destaque': index % 2 == 0 }">
+                  <q-input v-model.number="item.quantidade"
+                    type="number" min="0" max="999" label="Quantidade"
+                  />
+                </div>
+                <div class="col-xs-12 col-sm-2"
+                  v-bind:class="{ 'item-destaque': index % 2 == 0 }">
+                  <q-input v-model="item.produto.preco" label="Preço unitário"
+                    disable
+                  />
+                </div>
+                <div class="col-xs-12 col-sm-2"
+                  v-bind:class="{ 'item-destaque': index % 2 == 0 }">
+                  <q-input v-model="precoVenda(item)" label="Preço venda"
+                    disable
+                  />
+                </div>
+              </div>
+
+              <br>
+              <span class="text-weight-medium">Valor do pedido: {{ totalPedido }}</span>
+
+              <br><br>
+              <div>
+                <q-btn label="Enviar" type="submit" color="primary"/>
+              </div>
+            </q-form>
+          </q-page>
+        </q-page-container>
+      </q-layout>
+    </div>
+
+    <script src="scripts/pedido.js"></script>
+  </body>
+</html>
